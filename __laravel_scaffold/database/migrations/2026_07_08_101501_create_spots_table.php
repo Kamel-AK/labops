@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('zone_id')->constrained('zones')->onDelete('cascade'); // bigint
             $table->string('name'); // varchar
-            $table->string('type', SpotType::cases()); // enum
-            $table->string('status', SpotStatus::cases())->default(SpotStatus::ACTIVE->value); // enum
+            $table->string('type', 255); // string
+            $table->string('status', 255)->default(SpotStatus::ACTIVE->value); // string
             $table->integer('capacity')->default(1); // integer
             $table->timestamps();
         });

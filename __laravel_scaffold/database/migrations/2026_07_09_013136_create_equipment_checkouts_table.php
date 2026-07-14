@@ -24,8 +24,8 @@ return new class extends Migration
             $table->dateTime('expected_return_at'); // datetime
             $table->dateTime('actual_return_at')->nullable(); // datetime
             
-            $table->string('status', CheckoutStatus::cases()); // enum
-            $table->string('type', CheckoutType::cases()); // enum
+            $table->string('status', 255); // string
+            $table->string('type', 255); // string
             $table->text('condition_on_return')->nullable(); // text
             $table->timestamps();
         });

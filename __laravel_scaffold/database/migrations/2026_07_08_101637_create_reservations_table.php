@@ -22,7 +22,7 @@ return new class extends Migration
             $table->dateTime('start_time'); // datetime
             $table->dateTime('end_time'); // datetime
             $table->string('purpose'); // varchar
-            $table->string('status', ReservationStatus::cases()); // enum
+            $table->string('status', 255)->default(ReservationStatus::CHECKED_IN->value); // string
             
             $table->dateTime('checked_in_at')->nullable(); // datetime
             $table->dateTime('checked_out_at')->nullable(); // datetime

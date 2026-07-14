@@ -18,9 +18,9 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('equipment_categories'); // bigint
             $table->string('subcategory'); // varchar
             $table->string('asset_tag')->unique(); // varchar
-            $table->string('type', EquipmentType::cases()); // enum
-            $table->string('status', EquipmentStatus::cases())->default(EquipmentStatus::AVAILABLE->value); // enum
-            
+            $table->string('type', 255); // string
+            $table->string('status', 255)->default(EquipmentStatus::AVAILABLE->value); // string
+
             $table->foreignId('current_custodian_id')->nullable()->constrained('members')->onDelete('set null'); // bigint
             $table->foreignId('zone_id')->nullable()->constrained('zones')->onDelete('set null'); // bigint
             $table->foreignId('spot_id')->nullable()->constrained('spots')->onDelete('set null'); // bigint

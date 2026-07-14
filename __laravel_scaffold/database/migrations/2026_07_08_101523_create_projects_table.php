@@ -17,14 +17,14 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // varchar
             $table->text('description')->nullable(); // text
-            $table->string('status', ProjectStatus::cases())->default(ProjectStatus::PENDING->value); // enum
+            $table->string('status', 255)->default(ProjectStatus::PENDING->value); // string
             $table->date('start_date')->nullable(); // date
             $table->date('target_end_date')->nullable(); // date
             $table->date('actual_end_date')->nullable(); // date
             $table->foreignId('lead_id')->constrained('users')->onDelete('cascade'); // bigint
             $table->foreignId('requested_by')->constrained('users')->onDelete('cascade'); // bigint
             $table->foreignId('approved_by')->constrained('users')->onDelete('cascade'); // bigint
-            $table->string('priority', ProjectPriority::cases())->default(ProjectPriority::MEDIUM); // enum
+            $table->string('priority', 255)->default(ProjectPriority::MEDIUM); // string
             $table->date('approved_at')->nullable(); // timestamp
             $table->timestamps();
         });
