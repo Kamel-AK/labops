@@ -32,8 +32,8 @@ class ZoneAndSpotSeeder extends Seeder
                 'operating_hour_start' => '10:00:00',
                 'operating_hour_end' => '18:00:00',
                 'spots' => [
-                    ['name' => 'Prusa 3D Printer 1', 'type' => SpotType::MACHINE_STATION->value],
-                    ['name' => 'Laser Cutter Workstation', 'type' => SpotType::MACHINE_STATION->value],
+                    ['name' => '3D Printer 1', 'type' => SpotType::MACHINE_STATION->value],
+                    ['name' => 'CNC Machine', 'type' => SpotType::MACHINE_STATION->value],
                 ]
             ],
             [
