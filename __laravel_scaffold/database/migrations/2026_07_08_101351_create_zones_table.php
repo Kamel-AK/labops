@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name'); // varchar
             $table->text('description')->nullable(); // text
             $table->string('color_code')->nullable(); // varchar
-            $table->string('status', ZoneStatus::cases())->default(ZoneStatus::OPEN->value); // enum
+            $table->enum('status', array_column(ZoneStatus::cases(), 'value'))->default(ZoneStatus::OPEN->value);//enum
             $table->date('operating_hours_start')->nullable(); // timestamp
             $table->date('operating_hours_end')->nullable(); // timestamp
             $table->timestamps();

@@ -19,13 +19,14 @@ return new class extends Migration
             $table->foreignId('member_id')->constrained('members')->onDelete('cascade'); // bigint
             $table->foreignId('reservation_id')->nullable()->constrained('reservations')->onDelete('set null'); // bigint (nullable)
             $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('set null'); // bigint (nullable)
-            
+
             $table->dateTime('checked_out_at'); // datetime
             $table->dateTime('expected_return_at'); // datetime
             $table->dateTime('actual_return_at')->nullable(); // datetime
-            
-            $table->string('status', CheckoutStatus::cases()); // enum
-            $table->string('type', CheckoutType::cases()); // enum
+
+
+            $table->enum('status', array_column(CheckoutStatus::cases(), 'value')); // enum
+            $table->enum('type', array_column(CheckoutType::cases(), 'value')); // enum
             $table->text('condition_on_return')->nullable(); // text
             $table->timestamps();
         });

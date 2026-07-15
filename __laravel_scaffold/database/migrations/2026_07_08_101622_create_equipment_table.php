@@ -18,9 +18,9 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('equipment_categories'); // bigint
             $table->string('subcategory'); // varchar
             $table->string('asset_tag')->unique(); // varchar
-            $table->string('type', EquipmentType::cases()); // enum
-            $table->string('status', EquipmentStatus::cases())->default(EquipmentStatus::AVAILABLE->value); // enum
-            
+            $table->enum('type', array_column(EquipmentType::cases(), 'value')); // enum
+            $table->enum('status', array_column(EquipmentStatus::cases(), 'value'))->default(EquipmentStatus::AVAILABLE->value); // enum
+
             $table->foreignId('current_custodian_id')->nullable()->constrained('members')->onDelete('set null'); // bigint
             $table->foreignId('zone_id')->nullable()->constrained('zones')->onDelete('set null'); // bigint
             $table->foreignId('spot_id')->nullable()->constrained('spots')->onDelete('set null'); // bigint
@@ -28,10 +28,10 @@ return new class extends Migration
             $table->integer('quantity_total')->default(1); // int
             $table->integer('quantity_available')->default(1); // int
             $table->integer('min_stock_threshold')->default(0); // int
-            
+
             $table->boolean('allow_borrow')->default(false); // boolean
             $table->integer('max_borrow_days')->default(0); // int
-            
+
             $table->string('photo_url')->nullable(); // varchar
             $table->string('manual_url')->nullable(); // varchar
             $table->text('notes')->nullable(); // text

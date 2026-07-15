@@ -18,12 +18,12 @@ return new class extends Migration
             $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('set null'); // bigint (nullable)
             $table->foreignId('zone_id')->constrained('zones'); // bigint
             $table->foreignId('spot_id')->constrained('spots'); // bigint
-            
+
             $table->dateTime('start_time'); // datetime
             $table->dateTime('end_time'); // datetime
             $table->string('purpose'); // varchar
-            $table->string('status', ReservationStatus::cases()); // enum
-            
+            $table->enum('status', array_column(ReservationStatus::cases(), 'value')); // enum
+
             $table->dateTime('checked_in_at')->nullable(); // datetime
             $table->dateTime('checked_out_at')->nullable(); // datetime
             $table->foreignId('created_by')->constrained('members'); // bigint
