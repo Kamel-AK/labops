@@ -4,9 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\Equipment;
 use Illuminate\Http\Request;
+use App\Services\EquipmentService;
 
 class EquipmentController extends Controller
 {
+    protected EquipmentService $equipmentService;
+
+    public function __construct(EquipmentService $equipmentService)
+    {
+        $this->equipmentService = $equipmentService;
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:csv,txt|max:2048',
+        ]);
+
+        try {
+            $result = $this->equipmentService->parseCsvAndImport($request->file('file'));
+            
+            return response()->json([
+                'message' => "تم استيراد {$result['imported_count']} قطعة بنجاح.",
+                'warnings' => $result['errors']
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 422);
+        }
+    }
     /**
      * Display a listing of the resource.
      */

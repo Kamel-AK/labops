@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EquipmentController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('dashboard')->name('api.dashboard.')->group(function () {
@@ -20,7 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('equipment')->name('api.equipment.')->group(function () {
-        //
+        Route::post('/import', [EquipmentController::class, 'import']);
     });
 
     Route::prefix('inventory')->name('api.inventory.')->group(function () {
