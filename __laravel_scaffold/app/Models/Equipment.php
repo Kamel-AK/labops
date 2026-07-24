@@ -7,7 +7,15 @@ use App\Enums\EquipmentStatus;
 
 class Equipment extends Model
 {
-    protected $fillable = ['equipment_category_id', 'asset_tag', 'name', 'model_number', 'status', 'notes'];
+    protected $fillable = [
+        'name',
+        'category_id', 
+        'subcategory',
+        'asset_tag',
+        'type',
+        'status',
+        'notes',
+    ];
 
     protected function casts(): array
     {
@@ -18,6 +26,6 @@ class Equipment extends Model
 
     public function category()
     {
-        return $this->belongsTo(EquipmentCategory::class, 'equipment_category_id');
+        return $this->belongsTo(EquipmentCategory::class, 'category_id');
     }
 }
