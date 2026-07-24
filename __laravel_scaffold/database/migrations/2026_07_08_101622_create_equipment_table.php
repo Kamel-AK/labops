@@ -28,10 +28,10 @@ return new class extends Migration
             $table->integer('quantity_total')->default(1); // int
             $table->integer('quantity_available')->default(1); // int
             $table->integer('min_stock_threshold')->default(0); // int
-            
+
             $table->boolean('allow_borrow')->default(false); // boolean
             $table->integer('max_borrow_days')->default(0); // int
-            
+
             $table->string('photo_url')->nullable(); // varchar
             $table->string('manual_url')->nullable(); // varchar
             $table->text('notes')->nullable(); // text
