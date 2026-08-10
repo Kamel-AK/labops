@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EquipmentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,6 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('equipment')->name('equipment.')->group(function () {
         Route::get('/', fn () => Inertia::render('equipment/pages/Index'))->name('index');
+        Route::post('/import', [EquipmentController::class, 'import'])->name('import');
     });
 
     Route::prefix('inventory')->name('inventory.')->group(function () {
