@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->constrained('members')->onDelete('cascade'); // bigint
+            $table->foreignId('member_id')->constrained('members')->restrictOnDelete(); // bigint
             $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('set null'); // bigint (nullable)
             $table->foreignId('zone_id')->constrained('zones'); // bigint
             $table->foreignId('spot_id')->constrained('spots'); // bigint
@@ -22,14 +22,16 @@ return new class extends Migration
             $table->dateTime('start_time'); // datetime
             $table->dateTime('end_time'); // datetime
             $table->string('purpose'); // varchar
-            $table->string('status', 255)->default(ReservationStatus::CHECKED_IN->value); // string
+            $table->string('status', 255)->default(ReservationStatus::CONFIRMED->value); // string
             
             $table->dateTime('checked_in_at')->nullable(); // datetime
             $table->dateTime('checked_out_at')->nullable(); // datetime
-            $table->foreignId('created_by')->constrained('members'); // bigint
+            $table->foreignId('created_by')->constrained('members')->restrictOnDelete(); // bigint
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['spot_id', 'start_time', 'end_time', 'status'], 'idx_reservations_spot_time');
+            $table->index(['member_id', 'start_time', 'end_time', 'status'], 'idx_reservations_member_time');
         });
     }
 

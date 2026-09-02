@@ -13,14 +13,18 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // varchar
-            $table->string('email')->unique(); // varchar
-            $table->string('password'); // varchar
-            $table->string('telegram_chat_id')->nullable(); // varchar
-            $table->string('role', 255); // string
-            $table->string('access_status', 255); // string
-            $table->text('skills_note')->nullable(); // text
+            $table->string('full_name');
+            $table->string('email')->unique();
+            $table->string('phone')->nullable();
+            $table->string('password_hash');
+            $table->string('role')->default('volunteer');
+            $table->string('access_status')->default('pending');
+            $table->json('skills')->nullable();
+            $table->json('certifications')->nullable();
+            $table->text('emergency_contact')->nullable();
+            $table->date('join_date')->nullable();
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

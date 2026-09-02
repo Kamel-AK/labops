@@ -18,8 +18,9 @@ return new class extends Migration
             $table->foreignId('zone_id')->constrained('zones')->onDelete('cascade'); // bigint
             $table->string('name'); // varchar
             $table->string('type', 255); // string
-            $table->string('status', 255)->default(SpotStatus::ACTIVE->value); // string
             $table->integer('capacity')->default(1); // integer
+            $table->text('description')->nullable(); // text
+            $table->string('status', 255)->default(SpotStatus::ACTIVE->value); // string
             $table->timestamps();
         });
     }

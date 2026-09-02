@@ -16,6 +16,7 @@ class Spot extends Model
         'type',
         'status',
         'capacity',
+        'description',
     ];
 
     

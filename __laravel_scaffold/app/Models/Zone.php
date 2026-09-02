@@ -11,8 +11,8 @@ class Zone extends Model
         'name',
         'description',
         'color_code',
-        'operating_hour_start',
-        'operating_hour_end',
+        'operating_hours_start',
+        'operating_hours_end',
         'status',
     ];
 

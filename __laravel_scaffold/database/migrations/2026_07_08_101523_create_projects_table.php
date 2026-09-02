@@ -15,17 +15,17 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // varchar
-            $table->text('description')->nullable(); // text
-            $table->string('status', 255)->default(ProjectStatus::PENDING->value); // string
-            $table->date('start_date')->nullable(); // date
-            $table->date('target_end_date')->nullable(); // date
-            $table->date('actual_end_date')->nullable(); // date
-            $table->foreignId('lead_id')->constrained('users')->onDelete('cascade'); // bigint
-            $table->foreignId('requested_by')->constrained('users')->onDelete('cascade'); // bigint
-            $table->foreignId('approved_by')->constrained('users')->onDelete('cascade'); // bigint
-            $table->string('priority', 255)->default(ProjectPriority::MEDIUM); // string
-            $table->date('approved_at')->nullable(); // timestamp
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('status')->default(ProjectStatus::PROPOSED->value);
+            $table->foreignId('lead_id')->constrained('members')->restrictOnDelete();
+            $table->foreignId('requested_by')->constrained('members')->restrictOnDelete();
+            $table->foreignId('approved_by')->nullable()->constrained('members')->nullOnDelete();
+            $table->timestamp('approved_at')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('target_end_date')->nullable();
+            $table->string('priority')->default(ProjectPriority::MEDIUM->value);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
