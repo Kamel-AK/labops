@@ -3,63 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Spot;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class SpotController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use AuthorizesRequests;
+
+    public function index(): Response
     {
-        //
+        $this->authorize('viewAny', Spot::class);
+
+        return Inertia::render('spots/pages/Index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Spot::class);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Spot $spot)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Spot $spot)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Spot $spot)
     {
-        //
+        $this->authorize('update', $spot);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Spot $spot)
     {
-        //
+        $this->authorize('delete', $spot);
     }
 }

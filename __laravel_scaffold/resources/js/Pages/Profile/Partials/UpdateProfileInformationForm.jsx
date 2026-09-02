@@ -14,8 +14,12 @@ export default function UpdateProfileInformation({
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
-            name: user.name,
+            full_name: user.full_name,
             email: user.email,
+            phone: user.phone ?? '',
+            skills: user.skills ?? [],
+            certifications: user.certifications ?? [],
+            emergency_contact: user.emergency_contact ?? '',
         });
 
     const submit = (e) => {
@@ -38,19 +42,19 @@ export default function UpdateProfileInformation({
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="full_name" value="Full name" />
 
                     <TextInput
-                        id="name"
+                        id="full_name"
                         className="mt-1 block w-full"
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
+                        value={data.full_name}
+                        onChange={(e) => setData('full_name', e.target.value)}
                         required
                         isFocused
                         autoComplete="name"
                     />
 
-                    <InputError className="mt-2" message={errors.name} />
+                    <InputError className="mt-2" message={errors.full_name} />
                 </div>
 
                 <div>
@@ -67,6 +71,33 @@ export default function UpdateProfileInformation({
                     />
 
                     <InputError className="mt-2" message={errors.email} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="phone" value="Phone" />
+
+                    <TextInput
+                        id="phone"
+                        className="mt-1 block w-full"
+                        value={data.phone}
+                        onChange={(e) => setData('phone', e.target.value)}
+                        autoComplete="tel"
+                    />
+
+                    <InputError className="mt-2" message={errors.phone} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="emergency_contact" value="Emergency contact" />
+
+                    <TextInput
+                        id="emergency_contact"
+                        className="mt-1 block w-full"
+                        value={data.emergency_contact}
+                        onChange={(e) => setData('emergency_contact', e.target.value)}
+                    />
+
+                    <InputError className="mt-2" message={errors.emergency_contact} />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (

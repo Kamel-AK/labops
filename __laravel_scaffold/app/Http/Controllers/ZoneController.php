@@ -3,63 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Zone;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ZoneController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use AuthorizesRequests;
+
+    public function index(): Response
     {
-        //
+        $this->authorize('viewAny', Zone::class);
+
+        return Inertia::render('zones/pages/Index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Zone::class);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Zone $zone)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Zone $zone)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Zone $zone)
     {
-        //
+        $this->authorize('update', $zone);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Zone $zone)
     {
-        //
+        $this->authorize('delete', $zone);
     }
 }

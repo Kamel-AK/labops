@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('type', array_column(SpotType::cases(), 'value')); // enum
             $table->enum('status', array_column(SpotStatus::cases(), 'value'))->default(SpotStatus::ACTIVE->value);//enum
             $table->integer('capacity')->default(1); // integer
+            $table->text('description')->nullable(); // text
             $table->timestamps();
         });
     }

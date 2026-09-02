@@ -3,63 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ReservationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use AuthorizesRequests;
+
+    public function index(): Response
     {
-        //
+        $this->authorize('viewAny', Reservation::class);
+
+        return Inertia::render('reservations/pages/Index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Reservation::class);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Reservation $reservation)
     {
-        //
+        $this->authorize('view', $reservation);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Reservation $reservation)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Reservation $reservation)
     {
-        //
+        $this->authorize('update', $reservation);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Reservation $reservation)
     {
-        //
+        $this->authorize('cancel', $reservation);
     }
 }

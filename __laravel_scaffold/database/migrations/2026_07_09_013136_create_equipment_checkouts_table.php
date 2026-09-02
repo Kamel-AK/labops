@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('equipment_checkouts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('equipment_id')->constrained('equipment')->onDelete('cascade'); // bigint
-            $table->foreignId('member_id')->constrained('members')->onDelete('cascade'); // bigint
+            $table->foreignId('equipment_id')->constrained('equipment')->restrictOnDelete(); // bigint
+            $table->foreignId('member_id')->constrained('members')->restrictOnDelete(); // bigint
             $table->foreignId('reservation_id')->nullable()->constrained('reservations')->onDelete('set null'); // bigint (nullable)
             $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('set null'); // bigint (nullable)
 
@@ -26,9 +26,11 @@ return new class extends Migration
 
 
             $table->enum('status', array_column(CheckoutStatus::cases(), 'value')); // enum
-            $table->enum('type', array_column(CheckoutType::cases(), 'value')); // enum
-            $table->text('condition_on_return')->nullable(); // text
+            $table->enum('checkout_type', array_column(CheckoutType::cases(), 'value')); // enum
+            $table->text('return_condition')->nullable(); // text
             $table->timestamps();
+
+            $table->index(['status', 'equipment_id'], 'idx_checkouts_active');
         });
     }
 

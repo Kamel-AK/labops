@@ -3,63 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Equipment;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class EquipmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use AuthorizesRequests;
+
+    public function index(): Response
     {
-        //
+        $this->authorize('viewAny', Equipment::class);
+
+        return Inertia::render('equipment/pages/Index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Equipment::class);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Equipment $equipment)
     {
-        //
+        $this->authorize('view', $equipment);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Equipment $equipment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Equipment $equipment)
     {
-        //
+        $this->authorize('update', $equipment);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Equipment $equipment)
     {
-        //
+        $this->authorize('delete', $equipment);
     }
 }

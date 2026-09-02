@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('description')->nullable(); // text
             $table->string('color_code')->nullable(); // varchar
             $table->enum('status', array_column(ZoneStatus::cases(), 'value'))->default(ZoneStatus::OPEN->value);//enum
-            $table->date('operating_hours_start')->nullable(); // timestamp
-            $table->date('operating_hours_end')->nullable(); // timestamp
+            $table->time('operating_hours_start')->nullable(); // time
+            $table->time('operating_hours_end')->nullable(); // time
             $table->timestamps();
         });
     }

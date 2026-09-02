@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('consumable_usage', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('equipment_id')->constrained('equipment')->onDelete('cascade'); // bigint
-            $table->foreignId('member_id')->constrained('members')->onDelete('cascade'); // bigint
+            $table->foreignId('equipment_id')->constrained('equipment')->restrictOnDelete(); // bigint
+            $table->foreignId('member_id')->constrained('members')->restrictOnDelete(); // bigint
             $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('set null'); // bigint (nullable)
             
-            $table->integer('quantity_used'); // int
-            $table->integer('quantity_remaining_after'); // int
-            $table->dateTime('used_at'); // datetime
-            $table->string('purpose_note')->nullable(); // varchar
+            $table->decimal('quantity_used', 10, 2); // decimal
+            $table->decimal('quantity_remaining_after', 10, 2); // decimal
+            $table->text('notes')->nullable(); // text
             $table->timestamps();
         });
     }

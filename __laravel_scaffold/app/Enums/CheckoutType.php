@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum CheckoutType:string
 {
-    case INTERNAL = 'internal';
-    case EXTERNAL = 'external';
+    case IN_LAB = 'in_lab';
+    case BORROW = 'borrow';
 }

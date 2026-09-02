@@ -17,15 +17,15 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // varchar
             $table->text('description')->nullable(); // text
-            $table->enum('status', array_column(ProjectStatus::cases(), 'value'))->default(ProjectStatus::PENDING->value); // enum
+            $table->enum('status', array_column(ProjectStatus::cases(), 'value'))->default(ProjectStatus::PROPOSED->value); // enum
             $table->date('start_date')->nullable(); // date
             $table->date('target_end_date')->nullable(); // date
-            $table->date('actual_end_date')->nullable(); // date
-            $table->foreignId('lead_id')->constrained('users')->onDelete('cascade'); // bigint
-            $table->foreignId('requested_by')->constrained('users')->onDelete('cascade'); // bigint
-            $table->foreignId('approved_by')->constrained('users')->onDelete('cascade'); // bigint
+            $table->foreignId('lead_id')->constrained('members')->restrictOnDelete(); // bigint
+            $table->foreignId('requested_by')->constrained('members')->restrictOnDelete(); // bigint
+            $table->foreignId('approved_by')->nullable()->constrained('members')->nullOnDelete(); // bigint
             $table->enum('priority', array_column(ProjectPriority::cases(), 'value'))->default(ProjectPriority::MEDIUM->value); // enum
-            $table->date('approved_at')->nullable(); // timestamp
+            $table->timestamp('approved_at')->nullable(); // timestamp
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -1,6 +1,13 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberStatusController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\ZoneController;
+use App\Http\Controllers\SpotController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,19 +24,26 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('members')->name('members.')->group(function () {
-        Route::get('/', fn () => Inertia::render('members/pages/Index'))->name('index');
+        Route::get('/', [MemberController::class, 'index'])->name('index');
+        Route::post('/', [MemberController::class, 'store'])->name('store');
+        Route::get('/{member}', [MemberController::class, 'show'])->name('show');
+        Route::patch('/{member}', [MemberController::class, 'update'])->name('update');
+        Route::delete('/{member}', [MemberController::class, 'destroy'])->name('destroy');
+        Route::patch('/{member}/grant-access', [MemberStatusController::class, 'grantAccess'])->name('grant-access');
+        Route::patch('/{member}/suspend-access', [MemberStatusController::class, 'suspendAccess'])->name('suspend-access');
+        Route::patch('/{member}/role', [MemberStatusController::class, 'updateRole'])->name('update-role');
     });
 
     Route::prefix('projects')->name('projects.')->group(function () {
-        Route::get('/', fn () => Inertia::render('projects/pages/Index'))->name('index');
+        Route::get('/', [ProjectController::class, 'index'])->name('index');
     });
 
     Route::prefix('reservations')->name('reservations.')->group(function () {
-        Route::get('/', fn () => Inertia::render('reservations/pages/Index'))->name('index');
+        Route::get('/', [ReservationController::class, 'index'])->name('index');
     });
 
     Route::prefix('equipment')->name('equipment.')->group(function () {
-        Route::get('/', fn () => Inertia::render('equipment/pages/Index'))->name('index');
+        Route::get('/', [EquipmentController::class, 'index'])->name('index');
     });
 
     Route::prefix('inventory')->name('inventory.')->group(function () {
@@ -37,11 +51,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::prefix('zones')->name('zones.')->group(function () {
-        Route::get('/', fn () => Inertia::render('zones/pages/Index'))->name('index');
+        Route::get('/', [ZoneController::class, 'index'])->name('index');
     });
 
     Route::prefix('spots')->name('spots.')->group(function () {
-        Route::get('/', fn () => Inertia::render('spots/pages/Index'))->name('index');
+        Route::get('/', [SpotController::class, 'index'])->name('index');
     });
 
     Route::prefix('notifications')->name('notifications.')->group(function () {

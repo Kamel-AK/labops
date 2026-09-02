@@ -2,36 +2,39 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Reservation extends Model
+class EquipmentCheckout extends Model
 {
-    use SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
+        'equipment_id',
         'member_id',
+        'reservation_id',
         'project_id',
-        'zone_id',
-        'spot_id',
-        'start_time',
-        'end_time',
-        'purpose',
-        'status',
-        'checked_in_at',
         'checked_out_at',
-        'created_by',
+        'expected_return_at',
+        'actual_return_at',
+        'status',
+        'checkout_type',
+        'return_condition',
     ];
 
     protected function casts(): array
     {
         return [
-            'start_time' => 'datetime',
-            'end_time' => 'datetime',
-            'checked_in_at' => 'datetime',
             'checked_out_at' => 'datetime',
+            'expected_return_at' => 'datetime',
+            'actual_return_at' => 'datetime',
         ];
+    }
+
+    public function equipment(): BelongsTo
+    {
+        return $this->belongsTo(Equipment::class);
     }
 
     public function member(): BelongsTo
@@ -42,10 +45,5 @@ class Reservation extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
-    }
-
-    public function creator(): BelongsTo
-    {
-        return $this->belongsTo(Member::class, 'created_by');
     }
 }
