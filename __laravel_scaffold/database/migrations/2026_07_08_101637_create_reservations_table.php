@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\ReservationStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\ReservationStatus;
 
 return new class extends Migration
 {
@@ -14,22 +14,22 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->constrained('members')->onDelete('cascade'); // bigint
-            $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('set null'); // bigint (nullable)
-            $table->foreignId('zone_id')->constrained('zones'); // bigint
-            $table->foreignId('spot_id')->constrained('spots'); // bigint
-
-            $table->dateTime('start_time'); // datetime
-            $table->dateTime('end_time'); // datetime
-            $table->string('purpose'); // varchar
-            $table->string('status', 255)->default(ReservationStatus::CHECKED_IN->value); // string
-            
-            $table->dateTime('checked_in_at')->nullable(); // datetime
-            $table->dateTime('checked_out_at')->nullable(); // datetime
-            $table->foreignId('created_by')->constrained('members'); // bigint
+            $table->foreignId('member_id')->constrained('members')->restrictOnDelete();
+            $table->foreignId('project_id')->nullable()->constrained('projects')->nullOnDelete();
+            $table->foreignId('zone_id')->constrained('zones');
+            $table->foreignId('spot_id')->constrained('spots');
+            $table->dateTime('start_time');
+            $table->dateTime('end_time');
+            $table->string('purpose');
+            $table->enum('status', array_column(ReservationStatus::cases(), 'value'))->default(ReservationStatus::CONFIRMED->value);
+            $table->dateTime('checked_in_at')->nullable();
+            $table->dateTime('checked_out_at')->nullable();
+            $table->foreignId('created_by')->constrained('members')->restrictOnDelete();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['spot_id', 'start_time', 'end_time', 'status'], 'idx_reservations_spot_time');
+            $table->index(['member_id', 'start_time', 'end_time', 'status'], 'idx_reservations_member_time');
         });
     }
 

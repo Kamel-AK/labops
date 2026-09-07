@@ -2,39 +2,44 @@
 
 namespace App\Policies;
 
-use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Member;
 
 class MemberPolicy
 {
-
-    public function viewAny(User $user): bool
+    public function viewAny(Member $user): bool
     {
-
-        return in_array($user->role, ['coordinator', 'team_lead']);
+        return $user->isCoordinator() || $user->isTeamLead();
     }
 
-
-    public function view(User $user, User $member): bool
+    public function view(Member $user, Member $member): bool
     {
-        return true;
+        return $user->isCoordinator()
+            || $user->isTeamLead()
+            || (int) $user->id === (int) $member->id;
     }
 
-    public function update(User $user, User $member): bool
+    public function viewContactDetails(Member $user, ?Member $member = null): bool
     {
-
-        if ($user->role === 'coordinator') {
-            return true;
-        }
-
-
-        return $user->id === $member->id;
+        return $user->isCoordinator() || $user->isTeamLead();
     }
 
-
-    public function delete(User $user, User $member): bool
+    public function create(Member $user): bool
     {
-        
-        return $user->role === 'coordinator';
+        return $user->isCoordinator();
+    }
+
+    public function update(Member $user, Member $member): bool
+    {
+        return $user->isCoordinator() || (int) $user->id === (int) $member->id;
+    }
+
+    public function manageLifecycle(Member $user, Member $member): bool
+    {
+        return $user->isCoordinator();
+    }
+
+    public function delete(Member $user, Member $member): bool
+    {
+        return $user->isCoordinator() && (int) $user->id !== (int) $member->id;
     }
 }

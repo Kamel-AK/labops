@@ -3,91 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Models\Equipment;
-use Illuminate\Http\Request;
 use App\Services\EquipmentService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class EquipmentController extends Controller
 {
-    protected EquipmentService $equipmentService;
+    use AuthorizesRequests;
 
-    public function __construct(EquipmentService $equipmentService)
+    public function __construct(
+        protected EquipmentService $equipmentService
+    ) {
+    }
+
+    public function index(): Response
     {
-        $this->equipmentService = $equipmentService;
+        $this->authorize('viewAny', Equipment::class);
+
+        return Inertia::render('equipment/pages/Index');
     }
 
     public function import(Request $request)
     {
+        $this->authorize('create', Equipment::class);
+
         $request->validate([
-            'file' => 'required|file|mimes:csv,txt|max:2048',
+            'file' => ['required', 'file', 'mimes:csv,txt', 'max:2048'],
         ]);
 
         try {
             $result = $this->equipmentService->parseCsvAndImport($request->file('file'));
-            
-            return response()->json([
-                'message' => "تم استيراد {$result['imported_count']} قطعة بنجاح.",
-                'warnings' => $result['errors']
-            ], 200);
 
-        } catch (\Exception $e) {
             return response()->json([
-                'error' => $e->getMessage()
+                'message' => "Imported {$result['imported_count']} equipment records successfully.",
+                'warnings' => $result['errors'],
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
             ], 422);
         }
     }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Equipment::class);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Equipment $equipment)
     {
-        //
+        $this->authorize('view', $equipment);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Equipment $equipment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Equipment $equipment)
     {
-        //
+        $this->authorize('update', $equipment);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Equipment $equipment)
     {
-        //
+        $this->authorize('delete', $equipment);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ZoneStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -11,12 +12,18 @@ class Zone extends Model
         'name',
         'description',
         'color_code',
-        'operating_hour_start',
-        'operating_hour_end',
         'status',
+        'operating_hours_start',
+        'operating_hours_end',
     ];
 
-    
+    protected function casts(): array
+    {
+        return [
+            'status' => ZoneStatus::class,
+        ];
+    }
+
     public function spots(): HasMany
     {
         return $this->hasMany(Spot::class);

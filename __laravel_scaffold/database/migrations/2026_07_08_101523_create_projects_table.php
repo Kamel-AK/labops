@@ -1,10 +1,10 @@
 <?php
 
+use App\Enums\ProjectPriority;
+use App\Enums\ProjectStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\ProjectStatus;
-use App\Enums\ProjectPriority;
 
 return new class extends Migration
 {
@@ -15,17 +15,17 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // varchar
-            $table->text('description')->nullable(); // text
-            $table->string('status', 255)->default(ProjectStatus::PENDING->value); // string
-            $table->date('start_date')->nullable(); // date
-            $table->date('target_end_date')->nullable(); // date
-            $table->date('actual_end_date')->nullable(); // date
-            $table->foreignId('lead_id')->constrained('users')->onDelete('cascade'); // bigint
-            $table->foreignId('requested_by')->constrained('users')->onDelete('cascade'); // bigint
-            $table->foreignId('approved_by')->constrained('users')->onDelete('cascade'); // bigint
-            $table->string('priority', 255)->default(ProjectPriority::MEDIUM); // string
-            $table->date('approved_at')->nullable(); // timestamp
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->enum('status', array_column(ProjectStatus::cases(), 'value'))->default(ProjectStatus::PROPOSED->value);
+            $table->date('start_date')->nullable();
+            $table->date('target_end_date')->nullable();
+            $table->foreignId('lead_id')->constrained('members')->restrictOnDelete();
+            $table->foreignId('requested_by')->constrained('members')->restrictOnDelete();
+            $table->foreignId('approved_by')->nullable()->constrained('members')->nullOnDelete();
+            $table->enum('priority', array_column(ProjectPriority::cases(), 'value'))->default(ProjectPriority::MEDIUM->value);
+            $table->timestamp('approved_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

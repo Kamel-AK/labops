@@ -35,7 +35,11 @@ return new class extends Migration
             $table->string('photo_url')->nullable(); // varchar
             $table->string('manual_url')->nullable(); // varchar
             $table->text('notes')->nullable(); // text
+            $table->softDeletes();
             $table->timestamps();
+
+            $table->index('status', 'idx_equipment_status');
+            $table->index('current_custodian_id', 'idx_equipment_custodian');
         });
     }
 

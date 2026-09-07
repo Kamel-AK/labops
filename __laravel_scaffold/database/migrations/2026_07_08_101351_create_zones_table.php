@@ -14,12 +14,12 @@ return new class extends Migration
     {
         Schema::create('zones', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // varchar
-            $table->text('description')->nullable(); // text
-            $table->string('color_code')->nullable(); // varchar
-            $table->string('status', 255)->default(ZoneStatus::OPEN->value); // string
-            $table->time('operating_hour_start')->nullable(); // timestamp
-            $table->time('operating_hour_end')->nullable(); // timestamp
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('color_code')->nullable();
+            $table->enum('status', array_column(ZoneStatus::cases(), 'value'))->default(ZoneStatus::OPEN->value);
+            $table->time('operating_hours_start')->nullable();
+            $table->time('operating_hours_end')->nullable();
             $table->timestamps();
         });
     }

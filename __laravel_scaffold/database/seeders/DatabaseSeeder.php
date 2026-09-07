@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Member;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,13 +12,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'full_name' => 'Test User',
+        Member::factory()->coordinator()->create([
+            'full_name' => 'Test Coordinator',
             'email' => 'test@example.com',
             'access_status' => 'granted',
         ]);
+
         $this->call([
             ZoneAndSpotSeeder::class,
         ]);
