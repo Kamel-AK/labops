@@ -27,7 +27,9 @@ class ProjectPolicy
 
     public function update(Member $user, Project $project): bool
     {
-        return $user->isCoordinator() || $project->isLedBy($user);
+        return $user->isCoordinator()
+            || $project->isLedBy($user)
+            || ($project->status === 'proposed' && (int) $project->requested_by === (int) $user->id);
     }
 
     public function approve(Member $user, Project $project): bool
@@ -38,5 +40,10 @@ class ProjectPolicy
     public function delete(Member $user, Project $project): bool
     {
         return $user->isCoordinator();
+    }
+
+    public function manageTeam(Member $user, Project $project): bool
+    {
+        return $user->isCoordinator() || $project->isLedBy($user);
     }
 }

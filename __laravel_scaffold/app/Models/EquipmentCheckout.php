@@ -46,4 +46,9 @@ class EquipmentCheckout extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function reservation(): BelongsTo
+    {
+        return $this->belongsTo(Reservation::class);
+    }
 }

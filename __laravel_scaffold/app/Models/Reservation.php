@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
@@ -47,5 +48,20 @@ class Reservation extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(Member::class, 'created_by');
+    }
+
+    public function zone(): BelongsTo
+    {
+        return $this->belongsTo(Zone::class);
+    }
+
+    public function spot(): BelongsTo
+    {
+        return $this->belongsTo(Spot::class);
+    }
+
+    public function equipment(): BelongsToMany
+    {
+        return $this->belongsToMany(Equipment::class, 'reservation_equipment');
     }
 }

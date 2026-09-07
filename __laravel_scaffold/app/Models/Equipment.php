@@ -7,6 +7,8 @@ use App\Enums\EquipmentType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Equipment extends Model
@@ -52,5 +54,30 @@ class Equipment extends Model
     public function currentCustodian(): BelongsTo
     {
         return $this->belongsTo(Member::class, 'current_custodian_id');
+    }
+
+    public function zone(): BelongsTo
+    {
+        return $this->belongsTo(Zone::class);
+    }
+
+    public function spot(): BelongsTo
+    {
+        return $this->belongsTo(Spot::class);
+    }
+
+    public function checkouts(): HasMany
+    {
+        return $this->hasMany(EquipmentCheckout::class);
+    }
+
+    public function consumableUsage(): HasMany
+    {
+        return $this->hasMany(ConsumableUsage::class);
+    }
+
+    public function neededByProjects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'project_equipment_needs')->withPivot('quantity_needed', 'notes');
     }
 }

@@ -15,8 +15,7 @@ class EquipmentController extends Controller
 
     public function __construct(
         protected EquipmentService $equipmentService
-    ) {
-    }
+    ) {}
 
     public function index(): Response
     {
@@ -34,17 +33,26 @@ class EquipmentController extends Controller
         ]);
 
         try {
-            $result = $this->equipmentService->parseCsvAndImport($request->file('file'));
+            $result = $this->equipmentService->importCsv($request->file('file'), $request->user());
 
             return response()->json([
                 'message' => "Imported {$result['imported_count']} equipment records successfully.",
-                'warnings' => $result['errors'],
+                'created_count' => $result['created_count'],
+                'updated_count' => $result['updated_count'],
             ]);
         } catch (\Throwable $e) {
             return response()->json([
                 'error' => $e->getMessage(),
             ], 422);
         }
+    }
+
+    public function previewImport(Request $request)
+    {
+        $this->authorize('create', Equipment::class);
+        $request->validate(['file' => ['required', 'file', 'mimes:csv,txt', 'max:2048']]);
+
+        return response()->json($this->equipmentService->previewCsv($request->file('file')));
     }
 
     public function store(Request $request)

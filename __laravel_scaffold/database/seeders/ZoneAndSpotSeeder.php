@@ -23,6 +23,9 @@ class ZoneAndSpotSeeder extends Seeder
                     ['name' => 'Electronics Bench A', 'type' => SpotType::BENCH->value],
                     ['name' => 'Electronics Bench B', 'type' => SpotType::BENCH->value],
                     ['name' => 'Oscilloscope Station', 'type' => SpotType::MACHINE->value],
+                    ['name' => 'Soldering Station 1', 'type' => SpotType::BENCH->value],
+                    ['name' => 'Soldering Station 2', 'type' => SpotType::BENCH->value],
+                    ['name' => 'PCB Inspection Station', 'type' => SpotType::MACHINE->value],
                 ],
             ],
             [
@@ -34,6 +37,10 @@ class ZoneAndSpotSeeder extends Seeder
                 'spots' => [
                     ['name' => 'Prusa 3D Printer 1', 'type' => SpotType::MACHINE->value],
                     ['name' => 'Laser Cutter Workstation', 'type' => SpotType::MACHINE->value],
+                    ['name' => 'Prusa 3D Printer 2', 'type' => SpotType::MACHINE->value],
+                    ['name' => 'CNC Router Station', 'type' => SpotType::MACHINE->value],
+                    ['name' => 'Vinyl Cutter Station', 'type' => SpotType::MACHINE->value],
+                    ['name' => 'Fabrication Prep Bench', 'type' => SpotType::BENCH->value],
                 ],
             ],
             [
@@ -46,6 +53,9 @@ class ZoneAndSpotSeeder extends Seeder
                     ['name' => 'Coding Desk 1', 'type' => SpotType::DESK->value],
                     ['name' => 'Coding Desk 2', 'type' => SpotType::DESK->value],
                     ['name' => 'Coding Desk 3', 'type' => SpotType::DESK->value],
+                    ['name' => 'Coding Desk 4', 'type' => SpotType::DESK->value],
+                    ['name' => 'Code Review Desk', 'type' => SpotType::DESK->value],
+                    ['name' => 'Pair Programming Desk', 'type' => SpotType::DESK->value],
                 ],
             ],
             [
@@ -56,6 +66,11 @@ class ZoneAndSpotSeeder extends Seeder
                 'operating_hours_end' => '20:00:00',
                 'spots' => [
                     ['name' => 'Inventory Management Desk', 'type' => SpotType::DESK->value],
+                    ['name' => 'Tool Checkout Counter', 'type' => SpotType::DESK->value],
+                    ['name' => 'Parts Sorting Bench', 'type' => SpotType::BENCH->value],
+                    ['name' => 'Secure Cabinet Station', 'type' => SpotType::MACHINE->value],
+                    ['name' => 'Receiving Desk', 'type' => SpotType::DESK->value],
+                    ['name' => 'Packing Bench', 'type' => SpotType::BENCH->value],
                 ],
             ],
             [
@@ -67,12 +82,16 @@ class ZoneAndSpotSeeder extends Seeder
                 'spots' => [
                     ['name' => 'Meeting Table Alpha', 'type' => SpotType::SHARED_TABLE->value],
                     ['name' => 'Brainstorming Bench', 'type' => SpotType::BENCH->value],
+                    ['name' => 'Meeting Table Beta', 'type' => SpotType::SHARED_TABLE->value],
+                    ['name' => 'Presentation Station', 'type' => SpotType::MACHINE->value],
+                    ['name' => 'Quiet Collaboration Desk', 'type' => SpotType::DESK->value],
+                    ['name' => 'Workshop Table', 'type' => SpotType::SHARED_TABLE->value],
                 ],
             ],
         ];
 
         foreach ($zones as $zoneData) {
-            $zone = Zone::create([
+            $zone = Zone::updateOrCreate(['name' => $zoneData['name']], [
                 'name' => $zoneData['name'],
                 'description' => $zoneData['description'],
                 'color_code' => $zoneData['color_code'],
@@ -81,7 +100,10 @@ class ZoneAndSpotSeeder extends Seeder
             ]);
 
             foreach ($zoneData['spots'] as $spotData) {
-                Spot::create([
+                Spot::updateOrCreate([
+                    'zone_id' => $zone->id,
+                    'name' => $spotData['name'],
+                ], [
                     'zone_id' => $zone->id,
                     'name' => $spotData['name'],
                     'type' => $spotData['type'],

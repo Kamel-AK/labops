@@ -24,6 +24,15 @@ class MemberController extends Controller
 
         $members = Member::query()
             ->when($request->user()->isTeamLead(), fn ($query) => $query->where('access_status', 'granted'))
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = trim($request->string('search')->value());
+                $query->where(fn ($memberQuery) => $memberQuery
+                    ->where('full_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%"));
+            })
+            ->when($request->filled('role'), fn ($query) => $query->where('role', $request->string('role')->value()))
+            ->when($request->filled('access_status'), fn ($query) => $query->where('access_status', $request->string('access_status')->value()))
+            ->when($request->filled('skill'), fn ($query) => $query->whereJsonContains('skills', $request->string('skill')->value()))
             ->orderBy('full_name')
             ->get()
             ->map(fn (Member $member) => $this->memberPayload($member, $canViewContact));
@@ -32,6 +41,7 @@ class MemberController extends Controller
             'members' => $members,
             'canCreateMembers' => $request->user()->can('create', Member::class),
             'canViewContactDetails' => $canViewContact,
+            'filters' => $request->only(['search', 'role', 'access_status', 'skill']),
         ]);
     }
 

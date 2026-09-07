@@ -29,6 +29,15 @@ class MemberStatusController extends Controller
         return back()->with('success', 'Member access suspended.');
     }
 
+    public function revokeAccess(Member $member): RedirectResponse
+    {
+        $this->authorize('manageLifecycle', $member);
+
+        $member->update(['access_status' => 'revoked']);
+
+        return back()->with('success', 'Member access revoked.');
+    }
+
     public function updateRole(Request $request, Member $member): RedirectResponse
     {
         $this->authorize('manageLifecycle', $member);
