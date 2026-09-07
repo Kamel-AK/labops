@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Equipment;
 use App\Models\Member;
+use App\Enums\EquipmentType;
 
 class EquipmentPolicy
 {
@@ -34,7 +35,7 @@ class EquipmentPolicy
 
     public function initiateCheckout(Member $user, Equipment $equipment): bool
     {
-        return $equipment->type === 'durable'
+        return $equipment->type === EquipmentType::DURABLE
             && ($user->isCoordinator() || $user->isTeamLead());
     }
 }
