@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Reservation extends Model
 {
@@ -63,5 +64,11 @@ class Reservation extends Model
     public function equipment(): BelongsToMany
     {
         return $this->belongsToMany(Equipment::class, 'reservation_equipment');
+    }
+
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(ActivityLog::class, 'entity_id')
+            ->where('entity_type', 'reservation');
     }
 }

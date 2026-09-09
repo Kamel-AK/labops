@@ -20,3 +20,19 @@ Schedule::call(fn () => app(ReservationReminderScanner::class)->scan())->everyTe
 Schedule::call(fn () => app(OverdueChecker::class)->scan())->everyFifteenMinutes()->name('labops:overdue-checks');
 Schedule::call(fn () => app(LowStockReconciler::class)->scan())->dailyAt('08:00')->name('labops:low-stock-reconciliation');
 Schedule::call(fn () => app(DailyCoordinatorSummary::class)->prepare())->dailyAt('08:30')->name('labops:coordinator-summary');
+
+Schedule::command('reservations:detect-no-shows')
+    ->everyFiveMinutes()
+    ->withoutOverlapping();
+
+Schedule::command('reservations:warn-overstays')
+    ->everyFiveMinutes()
+    ->withoutOverlapping();
+
+Schedule::command('reservations:release-overstayed')
+    ->everyFiveMinutes()
+    ->withoutOverlapping();
+
+Schedule::command('reservations:send-reminders')
+    ->everyTenMinutes()
+    ->withoutOverlapping();
