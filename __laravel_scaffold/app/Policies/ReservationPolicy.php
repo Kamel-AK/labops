@@ -62,4 +62,14 @@ class ReservationPolicy
             || (int) $reservation->member_id === (int) $user->id
             || ($user->isTeamLead() && $reservation->project && $reservation->project->isLedBy($user));
     }
+
+    public function complete(Member $user, Reservation $reservation): bool
+    {
+        return $this->checkIn($user, $reservation);
+    }
+
+    public function extend(Member $user, Reservation $reservation): bool
+    {
+        return $this->checkIn($user, $reservation);
+    }
 }

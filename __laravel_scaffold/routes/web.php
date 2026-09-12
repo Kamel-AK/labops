@@ -48,7 +48,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('reservations')->name('reservations.')->group(function () {
         Route::get('/', [ReservationController::class, 'index'])->name('index');
+        Route::get('/availability', [ReservationController::class, 'availability'])->name('availability');
         Route::post('/', [ReservationController::class, 'store'])->name('store');
+        Route::get('/{reservation}', [ReservationController::class, 'show'])->name('show');
+        Route::patch('/{reservation}', [ReservationController::class, 'update'])->name('update');
+        Route::post('/{reservation}/cancel', [ReservationController::class, 'cancel'])->name('cancel');
+        Route::post('/{reservation}/check-in', [ReservationController::class, 'checkIn'])->name('check-in');
+        Route::post('/{reservation}/complete', [ReservationController::class, 'complete'])->name('complete');
+        Route::post('/{reservation}/extend', [ReservationController::class, 'extend'])->name('extend');
     });
 
     Route::prefix('equipment')->name('equipment.')->group(function () {
